@@ -6,8 +6,9 @@ const precioTotal = document.querySelector('#precioTotal')
 
 const btnVaciar = document.getElementById('vaciarCarrito')
 
-let carrito
-const carritoEnLS = JSON.parse( localStorage.getItem('carrito') )
+
+const carrito = JSON.parse(localStorage.getItem('carrito')) || []
+
 
 
 
@@ -20,6 +21,7 @@ stockProductos.forEach((producto) => {
                     <h3>${producto.nombre}</h3>
                     <p>${producto.desc}</p>
                     <p>Talle: ${producto.talle}</p>
+                    ${producto.freeshipping === true ? '<p><strong>Envío gratis</strong></p>' : ''}
                     <p class="precioProducto">Precio: $${producto.precio}</p>
                     <button onclick="agregarAlCarrito(${producto.id})" class="boton-agregar">Agregar <i class="fas fa-shopping-cart"></i></button>
                 `
@@ -29,9 +31,12 @@ stockProductos.forEach((producto) => {
 
 
 
+
 const agregarAlCarrito = (id) => {
     const item = stockProductos.find( (producto) => producto.id === id)
     carrito.push(item)
+
+    showMensaje(item.nombre)
 
     localStorage.setItem('carrito', JSON.stringify(carrito))
 
@@ -95,13 +100,18 @@ const renderTotal = () => {
     precioTotal.innerText = total
 }
 
-
-if (carritoEnLS) {
-    carrito = carritoEnLS
-
-    renderCarrito()
-    renderCantidad()
-    renderTotal()
-} else {
-    carrito = []
+const showMensaje = (producto) => {
+    Toastify({
+        text: `Se agregó ${producto} al carrito!`,
+        duration: 3000,
+        gravity: 'bottom',
+        position: 'left',
+        style: {
+            background: "blue",
+          }
+    }).showToast()
 }
+
+renderCarrito()
+renderCantidad()
+renderTotal()
