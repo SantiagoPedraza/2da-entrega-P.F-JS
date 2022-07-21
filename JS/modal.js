@@ -15,3 +15,4 @@ contenedorModal.addEventListener('click', ()=>{
 modalCarrito.addEventListener('click', (event)=>{
     event.stopPropagation()
 })
+
